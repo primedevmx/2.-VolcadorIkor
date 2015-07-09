@@ -1,0 +1,51 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="VolcadorIkor.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="InstanciaServer" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Server=localhost;Port=3306;Database=dbIkor;Uid=root;Pwd=admin;</Value>
+    </Setting>
+    <Setting Name="cModo" Type="System.String" Scope="User">
+      <Value Profile="(Default)">M</Value>
+    </Setting>
+    <Setting Name="strCuentaReceptora" Type="System.String" Scope="User">
+      <Value Profile="(Default)">balzarowsky@gmail.com</Value>
+    </Setting>
+    <Setting Name="strCuentaEmisora" Type="System.String" Scope="User">
+      <Value Profile="(Default)">daemonikor@gmail.com</Value>
+    </Setting>
+    <Setting Name="strContrasenaEmisora" Type="System.String" Scope="User">
+      <Value Profile="(Default)">V0lc4d0r2015</Value>
+    </Setting>
+    <Setting Name="strRepoXMLs" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\</Value>
+    </Setting>
+    <Setting Name="strRepoDATs" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\</Value>
+    </Setting>
+    <Setting Name="strMiliTimerConn" Type="System.String" Scope="User">
+      <Value Profile="(Default)">60000</Value>
+    </Setting>
+    <Setting Name="InstanciaServerMysql" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Server=localhost;Port=3306;Database=dbIkor;Uid=root;Pwd=admin;</Value>
+    </Setting>
+    <Setting Name="InstanciaServerSql" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Data Source=192.168.48.182\SQLEXPRESS;initial catalog=dbIkorPCB;user id=UserIkor;password=admin;Connection Timeout=180000</Value>
+    </Setting>
+    <Setting Name="cModoD" Type="System.String" Scope="User">
+      <Value Profile="(Default)">M</Value>
+    </Setting>
+    <Setting Name="strRepoTXTs" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\</Value>
+    </Setting>
+    <Setting Name="strMiliTimerConnSQL" Type="System.String" Scope="User">
+      <Value Profile="(Default)">60000</Value>
+    </Setting>
+    <Setting Name="strRespaldoSQL" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\</Value>
+    </Setting>
+    <Setting Name="bAplicaResp" Type="System.String" Scope="User">
+      <Value Profile="(Default)">false</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

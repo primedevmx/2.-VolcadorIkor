@@ -1,0 +1,432 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5CD92938-14BA-4199-AB2F-789B764ED0CD}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>VolcadorIkor</RootNamespace>
+    <AssemblyName>VolcadorIkor</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <PublishUrl>ftp://creandoproyectosexitosos.com/</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <InstallUrl>http://creandoproyectosexitosos.com/ikormex/</InstallUrl>
+    <UpdateUrl>http://creandoproyectosexitosos.com/ikormex/</UpdateUrl>
+    <PublisherName>IKOR</PublisherName>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <WebPage>index.htm</WebPage>
+    <ApplicationRevision>9</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>60034037872DAEF9E27DD586534C9CE84A14FE9C</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>VolcadorIkor_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>ToolboxWindow.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MdiTabStrip">
+      <HintPath>..\..\Users\mkE\Desktop\MdiTabStrip.dll</HintPath>
+    </Reference>
+    <Reference Include="mysql.data">
+      <HintPath>..\..\..\MYSQL\mysql.data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="mysql.web">
+      <HintPath>..\..\..\MYSQL\mysql.web.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WeifenLuo.WinFormsUI.Docking">
+      <HintPath>..\..\Users\mkE\Desktop\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="clSeguridad.cs" />
+    <Compile Include="Configuracion\frmConfiguracionCorreo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Configuracion\frmConfiguracionCorreo.Designer.cs">
+      <DependentUpon>frmConfiguracionCorreo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Configuracion\frmConfiguracionRepositorios.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Configuracion\frmConfiguracionRepositorios.Designer.cs">
+      <DependentUpon>frmConfiguracionRepositorios.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Configuracion\frmMonitores.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Configuracion\frmMonitores.Designer.cs">
+      <DependentUpon>frmMonitores.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Mysql\frmProcesarXmls.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Mysql\frmProcesarXmls.designer.cs">
+      <DependentUpon>frmProcesarXmls.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Mysql\frmServidorMysql.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Mysql\frmServidorMysql.Designer.cs">
+      <DependentUpon>frmServidorMysql.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Opcionadores\frmOpcionConfiguracion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Opcionadores\frmOpcionConfiguracion.Designer.cs">
+      <DependentUpon>frmOpcionConfiguracion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Opcionadores\frmOpcionMysql.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Opcionadores\frmOpcionMysql.Designer.cs">
+      <DependentUpon>frmOpcionMysql.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Mysql\frmReporte.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Mysql\frmReporte.designer.cs">
+      <DependentUpon>frmReporte.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Opcionadores\frmMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Opcionadores\frmMenu.designer.cs">
+      <DependentUpon>frmMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Opcionadores\frmPrincipal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Opcionadores\frmPrincipal.designer.cs">
+      <DependentUpon>frmPrincipal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Configuracion\frmConfiguracionSistema.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Configuracion\frmConfiguracionSistema.Designer.cs">
+      <DependentUpon>frmConfiguracionSistema.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SQLHelper.cs" />
+    <Compile Include="SqlServer\frmConsultaRegistros.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SqlServer\frmConsultaRegistros.Designer.cs">
+      <DependentUpon>frmConsultaRegistros.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SqlServer\frmMtoStatus.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SqlServer\frmMtoStatus.Designer.cs">
+      <DependentUpon>frmMtoStatus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SqlServer\frmProcesarDATs.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SqlServer\frmProcesarDATs.Designer.cs">
+      <DependentUpon>frmProcesarDATs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SqlServer\frmServidorSqlServer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SqlServer\frmServidorSqlServer.Designer.cs">
+      <DependentUpon>frmServidorSqlServer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\frmTestConection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserControls\frmTestConection.designer.cs">
+      <DependentUpon>frmTestConection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="mSeguridad.cs" />
+    <Compile Include="MySqlHelper.cs" />
+    <Compile Include="Opcionadores\frmOpcionSql.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Opcionadores\frmOpcionSql.Designer.cs">
+      <DependentUpon>frmOpcionSql.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Opcionadores\Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="Opcionadores\ToolWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Opcionadores\ToolWindow.designer.cs">
+      <DependentUpon>ToolWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\frmConsulta.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserControls\frmConsulta.designer.cs">
+      <DependentUpon>frmConsulta.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\frmTestConnectionSql.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserControls\frmTestConnectionSql.Designer.cs">
+      <DependentUpon>frmTestConnectionSql.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\SplashScreenFormV2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserControls\SplashScreenFormV2.Designer.cs">
+      <DependentUpon>SplashScreenFormV2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\uctrlTablaConFiltro.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\uctrlTablaConFiltro.designer.cs">
+      <DependentUpon>uctrlTablaConFiltro.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Configuracion\frmConfiguracionCorreo.resx">
+      <DependentUpon>frmConfiguracionCorreo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Configuracion\frmConfiguracionRepositorios.resx">
+      <DependentUpon>frmConfiguracionRepositorios.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Configuracion\frmMonitores.resx">
+      <DependentUpon>frmMonitores.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Mysql\frmProcesarXmls.resx">
+      <DependentUpon>frmProcesarXmls.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Mysql\frmServidorMysql.resx">
+      <DependentUpon>frmServidorMysql.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Opcionadores\frmOpcionConfiguracion.resx">
+      <DependentUpon>frmOpcionConfiguracion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Opcionadores\frmOpcionMysql.resx">
+      <DependentUpon>frmOpcionMysql.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Mysql\frmReporte.resx">
+      <DependentUpon>frmReporte.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Opcionadores\frmMenu.resx">
+      <DependentUpon>frmMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Opcionadores\frmOpcionSql.resx">
+      <DependentUpon>frmOpcionSql.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Opcionadores\frmPrincipal.resx">
+      <DependentUpon>frmPrincipal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Configuracion\frmConfiguracionSistema.resx">
+      <DependentUpon>frmConfiguracionSistema.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SqlServer\frmConsultaRegistros.resx">
+      <DependentUpon>frmConsultaRegistros.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SqlServer\frmMtoStatus.resx">
+      <DependentUpon>frmMtoStatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SqlServer\frmProcesarDATs.resx">
+      <DependentUpon>frmProcesarDATs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SqlServer\frmServidorSqlServer.resx">
+      <DependentUpon>frmServidorSqlServer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\frmTestConection.resx">
+      <DependentUpon>frmTestConection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="Opcionadores\ToolWindow.resx">
+      <DependentUpon>ToolWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\frmConsulta.resx">
+      <DependentUpon>frmConsulta.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\frmTestConnectionSql.resx">
+      <DependentUpon>frmTestConnectionSql.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\SplashScreenFormV2.resx">
+      <DependentUpon>SplashScreenFormV2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\uctrlTablaConFiltro.resx">
+      <DependentUpon>uctrlTablaConFiltro.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="VolcadorIkor_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 y x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\electrical_threshold-128.png" />
+    <Content Include="Resources\30y.PNG" />
+    <Content Include="Resources\accept_database-32.png" />
+    <Content Include="Resources\xls-128.png" />
+    <Content Include="ToolboxWindow.ico" />
+    <None Include="Resources\accept_database-321.png" />
+    <Content Include="Resources\add_database-32.png" />
+    <Content Include="Resources\approval-32.png" />
+    <None Include="Resources\approval-321.png" />
+    <Content Include="Resources\approval-48.png" />
+    <Content Include="Resources\barTOP.png" />
+    <Content Include="Resources\barTOP2.png" />
+    <Content Include="Resources\bg.JPG" />
+    <Content Include="Resources\bgbar.JPG" />
+    <Content Include="Resources\bgBlue1.jpg" />
+    <Content Include="Resources\bgBlue2.png" />
+    <Content Include="Resources\bgBlue3.jpg" />
+    <Content Include="Resources\bgDark1.JPG" />
+    <Content Include="Resources\bgDark2.png" />
+    <Content Include="Resources\bgOrange1.jpg" />
+    <Content Include="Resources\bgRed1.png" />
+    <Content Include="Resources\burn_folder-128.png" />
+    <Content Include="Resources\Captura.ico" />
+    <Content Include="Resources\Configure alt 1.ico" />
+    <Content Include="Resources\database-128.png" />
+    <Content Include="Resources\database-32.png" />
+    <Content Include="Resources\database-64.png" />
+    <Content Include="Resources\data_configuration-128.png" />
+    <Content Include="Resources\delete-26.png" />
+    <Content Include="Resources\delete-32.png" />
+    <Content Include="Resources\delete-321.png" />
+    <Content Include="Resources\delete_database-32.png" />
+    <Content Include="Resources\delete_file-26.png" />
+    <Content Include="Resources\delete_file-32.png" />
+    <Content Include="Resources\descarga.jpg" />
+    <Content Include="Resources\electrical_threshold-64.png" />
+    <Content Include="Resources\engineering-32.png" />
+    <Content Include="Resources\excel-32.png" />
+    <Content Include="Resources\fondo.png" />
+    <Content Include="Resources\fondoIKOR.png" />
+    <Content Include="Resources\fondoIKOR1.png" />
+    <Content Include="Resources\fondoIKOR2.png" />
+    <Content Include="Resources\fondoIKOR3.PNG" />
+    <None Include="Resources\google_web_search-32.png" />
+    <Content Include="Resources\gmail_login-128.png" />
+    <Content Include="Resources\google_blog_search-128.png" />
+    <Content Include="Resources\google_blog_search-512.png" />
+    <Content Include="Resources\ikor %281%29.ico" />
+    <Content Include="Resources\ikor-redes-sociales.jpg" />
+    <None Include="Resources\images.png" />
+    <Content Include="Resources\image_file-26.png" />
+    <Content Include="Resources\img_sectores01.jpg" />
+    <Content Include="Resources\info-32.png" />
+    <Content Include="Resources\info-321.png" />
+    <Content Include="Resources\Libraries alt.ico" />
+    <Content Include="Resources\monitor-32.png" />
+    <None Include="Resources\mysql.png" />
+    <None Include="Resources\mysql-128.png" />
+    <Content Include="Resources\orange gradient box tall 2.jpg" />
+    <Content Include="Resources\Placa.PNG" />
+    <Content Include="Resources\question_shield-32.png" />
+    <Content Include="Resources\question_shield-321.png" />
+    <Content Include="Resources\redim.jpg" />
+    <Content Include="Resources\save_as-26.png" />
+    <Content Include="Resources\Shortcuts.ico" />
+    <None Include="Resources\stop-48.png" />
+    <None Include="Resources\start-48.png" />
+    <None Include="Resources\start-48_blk.png" />
+    <None Include="Resources\start-48_wte.png" />
+    <None Include="Resources\stop-481.png" />
+    <Content Include="Resources\timer-128.png" />
+    <Content Include="Resources\ToolboxWindow.ico" />
+    <Content Include="Resources\top_navigation_toolbar-26.png" />
+    <Content Include="Resources\View_Details-32.png" />
+    <None Include="Resources\xml-1281.png" />
+    <None Include="Resources\xml-128.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
