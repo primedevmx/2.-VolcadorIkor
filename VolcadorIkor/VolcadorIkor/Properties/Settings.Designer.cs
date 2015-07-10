@@ -203,5 +203,17 @@ namespace VolcadorIkor.Properties {
                 this["bAplicaResp"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10000")]
+        public string strMiliTimerConnXMLD {
+            get {
+                return ((string)(this["strMiliTimerConnXMLD"]));
+            }
+            set {
+                this["strMiliTimerConnXMLD"] = value;
+            }
+        }
     }
 }

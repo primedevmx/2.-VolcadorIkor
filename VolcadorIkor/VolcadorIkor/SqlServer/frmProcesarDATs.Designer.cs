@@ -41,7 +41,6 @@
             this.panelManual = new System.Windows.Forms.Panel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.uctrlTablaConFiltroResultados = new VolcadorIkor.uctrlTablaConFiltro();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.tsbProcesar = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -62,6 +61,7 @@
             this.TSBTN_START = new System.Windows.Forms.ToolStripButton();
             this.tsbEstatusDaemon = new System.Windows.Forms.ToolStripLabel();
             this.timerMonitorConexion = new System.Windows.Forms.Timer(this.components);
+            this.uctrlTablaConFiltroResultados = new VolcadorIkor.uctrlTablaConFiltro();
             this.tspTittle.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.panelManual.SuspendLayout();
@@ -195,20 +195,6 @@
             this.groupBox3.TabIndex = 11;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Bitácora del proceso ";
-            // 
-            // uctrlTablaConFiltroResultados
-            // 
-            this.uctrlTablaConFiltroResultados.bContador = true;
-            this.uctrlTablaConFiltroResultados.bFiltro = true;
-            this.uctrlTablaConFiltroResultados.bMostrarGrip = true;
-            this.uctrlTablaConFiltroResultados.bTabStopFiltros = true;
-            this.uctrlTablaConFiltroResultados.DataSource = null;
-            this.uctrlTablaConFiltroResultados.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uctrlTablaConFiltroResultados.dtrAgregarFila = null;
-            this.uctrlTablaConFiltroResultados.Location = new System.Drawing.Point(3, 16);
-            this.uctrlTablaConFiltroResultados.Name = "uctrlTablaConFiltroResultados";
-            this.uctrlTablaConFiltroResultados.Size = new System.Drawing.Size(806, 293);
-            this.uctrlTablaConFiltroResultados.TabIndex = 0;
             // 
             // toolStrip2
             // 
@@ -429,6 +415,20 @@
             this.timerMonitorConexion.Interval = 240000;
             this.timerMonitorConexion.Tick += new System.EventHandler(this.OnTimer_timerMonitorConexion_Event);
             // 
+            // uctrlTablaConFiltroResultados
+            // 
+            this.uctrlTablaConFiltroResultados.bContador = false;
+            this.uctrlTablaConFiltroResultados.bFiltro = true;
+            this.uctrlTablaConFiltroResultados.bMostrarGrip = false;
+            this.uctrlTablaConFiltroResultados.bTabStopFiltros = false;
+            this.uctrlTablaConFiltroResultados.DataSource = null;
+            this.uctrlTablaConFiltroResultados.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.uctrlTablaConFiltroResultados.dtrAgregarFila = null;
+            this.uctrlTablaConFiltroResultados.Location = new System.Drawing.Point(3, 16);
+            this.uctrlTablaConFiltroResultados.Name = "uctrlTablaConFiltroResultados";
+            this.uctrlTablaConFiltroResultados.Size = new System.Drawing.Size(806, 293);
+            this.uctrlTablaConFiltroResultados.TabIndex = 0;
+            // 
             // frmProcesarDATs
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -480,7 +480,6 @@
         private System.Windows.Forms.Panel panelManual;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox3;
-        private uctrlTablaConFiltro uctrlTablaConFiltroResultados;
         private System.Windows.Forms.ToolStrip toolStrip2;
         public System.Windows.Forms.ToolStripButton tsbProcesar;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
@@ -501,5 +500,6 @@
         private uctrlTablaConFiltro uctrlTablaConFiltroResultadosAuto;
         private System.Windows.Forms.ToolStripLabel tsbEstatusDaemon;
         private System.Windows.Forms.Timer timerMonitorConexion;
+        private uctrlTablaConFiltro uctrlTablaConFiltroResultados;
     }
 }

@@ -631,6 +631,24 @@ namespace VolcadorIkor
             
             return dsTemp;        
         }
+         public DataSet dtObtenerTipoGOLD(string strStatus)
+        {
+            DataSet dsTemp
+                = new DataSet();
+             
+             string strCommand = "SELECT bAplicaReglas FROM [dbo].[tblPCB_Status] WHERE vchStatus = '"+strStatus+"'";
+
+            try
+            {
+                dsTemp = SqlHelper.ExecuteDataset(strConnSQL, CommandType.Text, strCommand);  
+                
+            }
+            catch {
+                dsTemp = null;
+            }
+            
+            return dsTemp;        
+        }
         #endregion DAT
         #endregion METODOS PUBLICOS
     }

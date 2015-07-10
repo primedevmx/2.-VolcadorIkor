@@ -18,6 +18,7 @@ namespace VolcadorIkor.SqlServer
         #region PROPIEDADES
         DataTable _dtTemp = null;
         mSeguridad _mSecurity = new mSeguridad();
+        System.Data.DataTable _dtTempArchivosProc = null;     
         #endregion PROPIEDADES
         #region CONSTRUCTORES
         public frmProcesarDATs()
@@ -30,7 +31,7 @@ namespace VolcadorIkor.SqlServer
         private void frmConfiguracion_Load(object sender, EventArgs e)
         {
             //GroupBox->>
-            groupBox6.Text = "Bitácora del proceso -> Reporitorio -> [" + Properties.Settings.Default.strRepoXMLs + "]";
+            groupBox6.Text = "Bitácora del proceso -> Reporitorio -> [" + Properties.Settings.Default.strRepoDATs + "]";
 
             if (Properties.Settings.Default.cModoD == "M")
             {
@@ -41,55 +42,300 @@ namespace VolcadorIkor.SqlServer
                 rbtnAutomatico.Checked = true;
             }
 
-            //Timer->>
-            vInicioTimerMonitorConn();
+            TSBTN_STOP_Click(null, null);
+
 
         }
         //Monitor de la conexion->>
         private void OnTimer_timerMonitorConexion_Event(object sender, EventArgs e)
         {
-            DataSet dsReturn = new DataSet("ParametrosAPP");
-            string strCommand = "";
-            string strSalida = "";
+            #region PREVIAS VALIDACIONES
+            ExtraerFicherorDelSubDirectorio(Properties.Settings.Default.strRepoDATs);
+            //Dataset Xmls Volcados->>
+            DataSet DS_XMLS = new DataSet();
+            DataSet _DS_DATS = new DataSet();
+            string STR_TIPO = "";
 
-            strCommand = "SELECT TOP 1 * FROM [dbo].[tblPCB_Status]";
+            //Previa Validacion->>
+            if (_dtTempArchivosProc == null || _dtTempArchivosProc.Rows.Count == 0)
+            {
+                return;
+            }
 
+            #endregion PREVIAS VALIDACIONES
 
-            Cursor.Current = Cursors.WaitCursor;
+            #region DEFINICION DE VARIABLES
+            //Mensaje Correcto->>
+            DataTable dtMensajesOut = new DataTable("Mensajes_Salida");
+            DataColumn dCArchivo = new DataColumn("chEstatus");
+            DataColumn dCNumeroPCB = new DataColumn("vchArchivo");
+            DataColumn dCMensaje = new DataColumn("vchDescripcion");
+            dtMensajesOut.Columns.Add(dCArchivo);
+            dtMensajesOut.Columns.Add(dCNumeroPCB);
+            dtMensajesOut.Columns.Add(dCMensaje);
 
+            //Mensaje InCorrecto->>
+            DataTable dtMensajesOutInc = new DataTable("Mensajes_Salida");
+            DataColumn dCArchivoInc = new DataColumn("chEstatus");
+            DataColumn dCNumeroPCBInc = new DataColumn("vchArchivo");
+            DataColumn dCMensajeInc = new DataColumn("vchDescripcion");
+            dtMensajesOutInc.Columns.Add(dCArchivoInc);
+            dtMensajesOutInc.Columns.Add(dCNumeroPCBInc);
+            dtMensajesOutInc.Columns.Add(dCMensajeInc);
+            #endregion DEFINICION DE VARIABLES
+
+            #region XML
             try
             {
-                //Consulta->>
-                dsReturn =
-                    Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteDataset(_mSecurity.strConnSQL, CommandType.Text, strCommand);
-
-
-                if (dsReturn.Tables[0].Rows.Count > 0)
+                //Comenzamos por xml->
+                #region LEER
+                DataTable dtXML = _dtTempArchivosProc.Select("[Archivo(s)_a_procesar] LIKE '%.xml'").CopyToDataTable();
+                foreach (DataRow DR in dtXML.Rows)
                 {
-                    //ok->>
+                    DataTable dt = _mSecurity.dtLeerXML_SQL(Properties.Settings.Default.strRepoDATs+"//"+ DR[0].ToString().Trim());
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        //FILL THE DATASET->>
+                        DS_XMLS.Tables.Add(dt);
+                    }
+
+                }//<--END FOREACH XML         
+                #endregion LEER
+                #region PROCESO
+                foreach (DataTable DTT in DS_XMLS.Tables)
+                {
+                    //Error Lectura-Validacion XML->>
+                    if (DTT.Columns.Count == 3)
+                    {
+                        DataRow DR0 = dtMensajesOutInc.NewRow();
+                        DR0[0] = DTT.Rows[0][0].ToString().Trim();
+                        DR0[1] = DTT.Rows[0][1].ToString().Trim();
+                        DR0[2] = DTT.Rows[0][2].ToString().Trim();
+                        dtMensajesOutInc.Rows.Add(DR0);
+
+                        continue;
+                    }
+
+                    //Process Volk->>
+                    DataTable DT_VOLK_SQL = _mSecurity.dtVolcadoSQL(DTT.Rows[0][0].ToString().Trim()
+                        , DTT.Rows[0][1].ToString().Trim(), DTT.Rows[0][2].ToString().Trim(), DTT.Rows[0][3].ToString().Trim());
+
+                    if ((DT_VOLK_SQL != null && DT_VOLK_SQL.Rows.Count > 0) && DT_VOLK_SQL.Rows[0][0].ToString().Trim() == "OK")
+                    {
+                        DataRow DR1 = dtMensajesOut.NewRow();
+                        DR1[0] = DTT.Rows[0][0].ToString().Trim();
+                        DR1[1] = DTT.Rows[0][1].ToString().Trim();
+                        DR1[2] = "Se ha ejecutado correctamente el proceso de la Serie=>> " + DTT.Rows[0][0].ToString().Trim()
+                            + " del archivo =>> " + DTT.TableName.ToString().Trim() + ".";
+                        dtMensajesOut.Rows.Add(DR1);
+
+                    }
+                    else
+                    {
+                        DataRow DR0 = dtMensajesOutInc.NewRow();
+                        DR0[0] = DTT.Rows[0][0].ToString().Trim();
+                        DR0[1] = DTT.Rows[0][1].ToString().Trim();
+                        DR0[2] = "Ha ocurrido un error en el insertado del Serie=>> " + DTT.Rows[0].ToString().Trim()
+                            + " " + DTT.Rows[0][1].ToString().Trim()
+                            + " Del archivo =>> " + DTT.TableName.ToString().Trim() + ".";
+                        dtMensajesOutInc.Rows.Add(DR0);
+
+                    }
+
+                    #region TXT
+                    //Genera TXT->>
+                     try
+                     {
+                         DataSet dsEstat = _mSecurity.dtObtenerTipoGOLD(DTT.Rows[0][1].ToString().ToUpper().Trim());
+
+                         if ((DT_VOLK_SQL != null && DT_VOLK_SQL.Rows.Count > 0) && dsEstat.Tables[0].Rows[0]["bAplicaReglas"].ToString().ToUpper().Trim() == "FALSE")
+                            {                      
+                                    string fic = Properties.Settings.Default.strRepoTXTs + DTT.Rows[0][0].ToString().Trim() + ".txt";
+                                    string texto = DTT.Rows[0][0].ToString().Trim() + ",PASS,0,0," + DTT.Rows[0][2].ToString().Trim();
+
+                                    System.IO.StreamWriter sw = new System.IO.StreamWriter(fic);
+                                    sw.WriteLine(texto);
+                                    sw.Close();
+                        
+                            }
+
+                    }
+                    catch { }
+                    #endregion TXT
+
+                    #region RESPALDO DE ARCHIVO PROCESADO
+                    if (Convert.ToBoolean(Properties.Settings.Default.bAplicaResp))
+                    {
+                        //Respaldo proceso ->>
+                        try
+                        {
+                            string strRuta = Properties.Settings.Default.strRepoDATs ;
+                            //Move File->
+                            System.IO.File.Move(strRuta + "//" + DTT.TableName.ToString().Trim()
+                                , Properties.Settings.Default.strRespaldoSQL + "//" + DTT.TableName.ToString().Trim());
+
+                        }
+                        catch { }
+
+                    }
+                    #endregion RESPALDO DE ARCHIVO PROCESADO
+
+                }//FOREACH XMLS
+                #endregion PROCESO
+                #region SALIDA DEL PROCESO MANUAL
+
+                if (dtMensajesOut.Rows.Count > 0)
+                {
+                    //Consulta Bitácora->>
+                    if (dtMensajesOutInc.Rows.Count > 0)
+                    {
+                        foreach (DataRow DRRR in dtMensajesOutInc.Rows)
+                        {
+                            dtMensajesOut.ImportRow(DRRR);
+                        }
+
+                    }
+
                 }
 
+                //Bitacora->>
+                uctrlTablaConFiltroResultadosAuto.DataSource = dtMensajesOut.Copy();
+                uctrlTablaConFiltroResultadosAuto.gridDatos.DataSource = dtMensajesOut.Copy();
+                uctrlTablaConFiltroResultadosAuto.gridDatos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+
+
+
+                #endregion SALIDA DEL PROCESO MANUAL    
+
             }
-            catch (Exception EX)
+            catch { }
+            #endregion XML
+
+            #region DAT
+            try
             {
-                dsReturn = null;
-                strSalida = EX.Message + " \r\n \r\n "
-                    + " \r\n \r\n - Verifique la configuracion de los parametros del servidor sql.";
+                //Finalizamos por dat->
+                #region LEER
+                DataTable dtDAT = _dtTempArchivosProc.Select("[Archivo(s)_a_procesar] LIKE '%.dat'").CopyToDataTable();
+                foreach (DataRow DR in dtDAT.Rows)
+                {
+                    DataTable dt = _mSecurity.dtLeerDAT(Properties.Settings.Default.strRepoDATs + "//" + DR[0].ToString().Trim());
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        //FILL THE DATASET->>
+                        _DS_DATS.Tables.Add(dt);
+                    }
+                }//<--END FOREACH DAT
+                #endregion LEER
+                #region PROCESO
+                foreach (DataTable DTT in _DS_DATS.Tables)
+                {
 
-                //Envia correo error en la conexion->>
-                fn_envioCorreoAutomatizado(strSalida);
+                    //Error Lectura-Validacion XML->>
+                    if (DTT.Columns.Count == 3)
+                    {
+                        DataRow DR0 = dtMensajesOutInc.NewRow();
+                        DR0[0] = DTT.Rows[0][0].ToString().Trim();
+                        DR0[1] = DTT.Rows[0][1].ToString().Trim();
+                        DR0[2] = DTT.Rows[0][2].ToString().Trim();
+                        dtMensajesOutInc.Rows.Add(DR0);
 
-                //Se detiene el monitor para evitar que se sigan enviando correos ->>
-                timerMonitorConexion.Stop();
-                timerMonitorConexion.Enabled = false;
+                        continue;
+                    }
 
-                //De detiene el daemon ->>
-                TSBTN_STOP_Click(null, null);
+                    //VOLK->>
+                    DataTable dtDATX
+                        = _mSecurity.dtVolcadoDat(DTT.Rows[0][1].ToString().Trim(), DTT.TableName.ToString().Trim(),
+                       Convert.ToInt32(DTT.Rows[0][3].ToString().Trim()), Convert.ToInt32(DTT.Rows[0][4].ToString().Trim()));
+
+                    if ((dtDATX != null && dtDAT.Rows.Count > 0) && dtDATX.Rows[0][0].ToString().Trim() == "OK")
+                    {
+                        DataRow DR1 = dtMensajesOut.NewRow();
+                        DR1[0] = DTT.Rows[0][0].ToString().Trim();
+                        DR1[1] = DTT.Rows[0][1].ToString().Trim();
+                        DR1[2] = "Se ha ejecutado correctamente el proceso de la Serie=>> " + DTT.Rows[0][1].ToString().Trim()
+                            + " del archivo =>> " + DTT.TableName.ToString().Trim() + ".";
+                        dtMensajesOut.Rows.Add(DR1);
+
+                    }
+                    else
+                    {
+                        DataRow DR0 = dtMensajesOutInc.NewRow();
+                        DR0[0] = DTT.Rows[0][0].ToString().Trim();
+                        DR0[1] = DTT.Rows[0][1].ToString().Trim();
+                        DR0[2] = "Ha ocurrido un error en el insertado del Serie=>> " + DTT.Rows[0][0].ToString().Trim()
+                            + " " + DTT.Rows[0][1].ToString().Trim()
+                            + " Del archivo =>> " + DTT.TableName.ToString().Trim() + ".";
+                        dtMensajesOutInc.Rows.Add(DR0);
+
+                    }
+
+                    #region TXT
+                    //Genera TXT->>
+                    DataSet DS_TXT = _mSecurity.dtLeerDatosTXT(DTT.Rows[0][1].ToString().Trim());
+                    try
+                    {
+                        string fic = Properties.Settings.Default.strRepoTXTs + DS_TXT.Tables[0].Rows[0][1].ToString().Trim() + ".txt";
+                        string texto = DS_TXT.Tables[0].Rows[0][1].ToString().Trim() + "," + DS_TXT.Tables[0].Rows[0][3].ToString().Trim() + "," + DS_TXT.Tables[0].Rows[0][4].ToString().Trim() + "," + DS_TXT.Tables[0].Rows[0][5].ToString().Trim();
+
+                        System.IO.StreamWriter sw = new System.IO.StreamWriter(fic);
+                        sw.WriteLine(texto);
+                        sw.Close();
+                    }
+                    catch { }
+                    #endregion TXT
+
+                    #region RESPALDO DE ARCHIVO PROCESADO
+                   if (Convert.ToBoolean(Properties.Settings.Default.bAplicaResp))
+                    {
+                        //Respaldo proceso ->>
+                        try
+                        {
+                            string strRuta = Properties.Settings.Default.strRepoDATs ;
+                            //Move File->
+                            System.IO.File.Move(strRuta + "//" + DTT.TableName.ToString().Trim()
+                                , Properties.Settings.Default.strRespaldoSQL + "//" + DTT.TableName.ToString().Trim());
+
+                        }
+                        catch { }
+
+                    }
+                    #endregion RESPALDO DE ARCHIVO PROCESADO
+
+                }//FOREACH DATS
+                #endregion PROCESO
+                #region SALIDA DEL PROCESO MANUAL
+
+                if (dtMensajesOut.Rows.Count > 0)
+                {
+                    //Consulta Bitácora->>
+                    if (dtMensajesOutInc.Rows.Count > 0)
+                    {
+                        foreach (DataRow DRRR in dtMensajesOutInc.Rows)
+                        {
+                            dtMensajesOut.ImportRow(DRRR);
+                        }
+
+                    }
+
+                }
+
+                //Bitacora->>
+                uctrlTablaConFiltroResultadosAuto.DataSource = dtMensajesOut.Copy();
+                uctrlTablaConFiltroResultadosAuto.gridDatos.DataSource = dtMensajesOut.Copy();
+                uctrlTablaConFiltroResultadosAuto.gridDatos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+
+
+
+                #endregion SALIDA DEL PROCESO MANUAL    
 
 
             }
+            catch { }
+            #endregion DAT
 
-            
+
+
         }
         private void rbtnManual_CheckedChanged(object sender, EventArgs e)
         {
@@ -104,6 +350,8 @@ namespace VolcadorIkor.SqlServer
             panelAutomatico.Visible = true;
             Properties.Settings.Default.cModoD = "A";
             Properties.Settings.Default.Save();
+            ExtraerFicherorDelSubDirectorio(Properties.Settings.Default.strRepoDATs);
+
         }
         private void tsbCerrar_Click(object sender, EventArgs e)
         {
@@ -262,6 +510,27 @@ namespace VolcadorIkor.SqlServer
 
                         }
 
+                        #region TXT
+                        //Genera TXT->>
+                        try
+                        {
+                            DataSet dsEstat = _mSecurity.dtObtenerTipoGOLD(DTT.Rows[0][1].ToString().ToUpper().Trim());
+
+                            if ((DT_VOLK_SQL != null && DT_VOLK_SQL.Rows.Count > 0) && dsEstat.Tables[0].Rows[0]["bAplicaReglas"].ToString().ToUpper().Trim() == "FALSE")
+                            {
+                                string fic = Properties.Settings.Default.strRepoTXTs + DTT.Rows[0][0].ToString().Trim() + ".txt";
+                                string texto = DTT.Rows[0][0].ToString().Trim() + ",PASS,0,0," + DTT.Rows[0][2].ToString().Trim();
+
+                                System.IO.StreamWriter sw = new System.IO.StreamWriter(fic);
+                                sw.WriteLine(texto);
+                                sw.Close();
+
+                            }
+
+                        }
+                        catch { }
+                        #endregion TXT
+
                         #region RESPALDO DE ARCHIVO PROCESADO
                         if (Convert.ToBoolean(Properties.Settings.Default.bAplicaResp))
                         {
@@ -270,19 +539,10 @@ namespace VolcadorIkor.SqlServer
                             {
                                 string [] str = txtArchivo.Text.Split(';');
                                 string strRuta = System.IO.Path.GetDirectoryName(str[0]);
-                                //Copiar archivo->
-                                System.IO.File.Copy(strRuta + "\\" + DTT.TableName.ToString().Trim()
-                                    , Properties.Settings.Default.strRespaldoSQL + "\\" + DTT.TableName.ToString().Trim(), true);
+                                //Move File->
+                                System.IO.File.Move(strRuta + "//" + DTT.TableName.ToString().Trim()
+                                    , Properties.Settings.Default.strRespaldoSQL + "//" + DTT.TableName.ToString().Trim());
 
-                                if (System.IO.File.Exists(strRuta + "\\" + DTT.TableName.ToString().Trim()))
-                                {
-                                    try
-                                    {
-                                        System.IO.File.Delete(strRuta + "\\" + DTT.TableName.ToString().Trim());
-                                    }
-                                    catch { }
-
-                                }
                             }
                             catch { }
 
@@ -360,21 +620,13 @@ namespace VolcadorIkor.SqlServer
                             {
                                 string[] str = txtArchivo.Text.Split(';');
                                 string strRuta = System.IO.Path.GetDirectoryName(str[0]);
-                                //Copiar archivo->
-                                System.IO.File.Copy(strRuta + "\\" + DTT.TableName.ToString().Trim()
-                                    , Properties.Settings.Default.strRespaldoSQL + "\\" + DTT.TableName.ToString().Trim(), true);
+                                //Move File->
+                                System.IO.File.Move(strRuta + "//" + DTT.TableName.ToString().Trim()
+                                    , Properties.Settings.Default.strRespaldoSQL + "//" + DTT.TableName.ToString().Trim());
 
-                                if (System.IO.File.Exists(strRuta + "\\" + DTT.TableName.ToString().Trim()))
-                                {
-                                    try
-                                    {
-                                        System.IO.File.Delete(strRuta + "\\" + DTT.TableName.ToString().Trim());
-                                    }
-                                    catch { }
-
-                                }
                             }
                             catch { }
+
 
                         }
                         #endregion RESPALDO DE ARCHIVO PROCESADO
@@ -390,15 +642,10 @@ namespace VolcadorIkor.SqlServer
                     return;
                 }
 
-              #region SALIDA DEL PROCESO MANUAL  
+              #region SALIDA DEL PROCESO MANUAL
 
-             //frmConsulta->>
                 if (dtMensajesOut.Rows.Count > 0)
-                {
-                    //Bitacora->>
-                    uctrlTablaConFiltroResultados.gridDatos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-                    uctrlTablaConFiltroResultados.DataSource = dtMensajesOut.Copy();
-
+                {           
                     //Consulta Bitácora->>
                     if (dtMensajesOutInc.Rows.Count > 0)
                     {
@@ -407,13 +654,17 @@ namespace VolcadorIkor.SqlServer
                             dtMensajesOut.ImportRow(DRRR);
                         }
 
-                        //Bitacora->>
-                        uctrlTablaConFiltroResultados.gridDatos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-                        uctrlTablaConFiltroResultados.DataSource = dtMensajesOut.Copy();
-                        
                     }
      
                 }
+
+                //Bitacora->>
+                uctrlTablaConFiltroResultados.DataSource = dtMensajesOut.Copy();
+                uctrlTablaConFiltroResultados.gridDatos.DataSource = dtMensajesOut.Copy();
+                uctrlTablaConFiltroResultados.gridDatos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+
+                MessageBox.Show("Operacion realizada satisfactoriamente. \n\r - Puede usted continuar. ", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
 
                 #endregion SALIDA DEL PROCESO MANUAL    
 
@@ -431,8 +682,8 @@ namespace VolcadorIkor.SqlServer
             try
             {
                 _dtTemp = null;
-                uctrlTablaConFiltroResultados.gridDatos.DataSource = null;
-                uctrlTablaConFiltroResultados.gridDatos = null;
+                _dtTempArchivosProc = null;   
+                uctrlTablaConFiltroResultados.gridDatos.DataSource = new DataTable();
                 txtArchivo.Text = "";
             }
             catch { }
@@ -462,18 +713,44 @@ namespace VolcadorIkor.SqlServer
             TSBTN_STOP.Enabled = false;
             groupBox5.Text = "Opciones del modo automatico ->> Estatus - Detenido";
             #endregion VENTANA
+
+            vFinTimerMonitorConn();
         }
         #endregion AUTOMATICO
         #endregion EVENTOS
         #region METODOS
-       
         private void vInicioTimerMonitorConn()
         {
             timerMonitorConexion.Start();
             timerMonitorConexion.Enabled = true;
-            timerMonitorConexion.Interval = Convert.ToInt32(Properties.Settings.Default.strMiliTimerConnSQL);
+            timerMonitorConexion.Interval = Convert.ToInt32(Properties.Settings.Default.strMiliTimerConnXMLD);
         }
+        private void vFinTimerMonitorConn()
+        {
+            timerMonitorConexion.Stop();
+            timerMonitorConexion.Enabled = false;
+            timerMonitorConexion.Interval = Convert.ToInt32(Properties.Settings.Default.strMiliTimerConnXMLD);
+        }
+        private void ExtraerFicherorDelSubDirectorio(string ruta)
+        {
+            System.IO.DirectoryInfo oDirectorio = new System.IO.DirectoryInfo(ruta);
+            //Limpiar->>
+            tsbLimpiar_Click(null, null);
+            //Tabla Temporal->>
+            _dtTempArchivosProc = new System.Data.DataTable("ArchivosProcesar");
+            System.Data.DataColumn dC = new DataColumn("Archivo(s)_a_procesar");
+            _dtTempArchivosProc.Columns.Add(dC);
 
+            //obtengo ls ficheros contenidos en la ruta
+            foreach (System.IO.FileInfo file in oDirectorio.GetFiles())
+            {
+                DataRow dR = _dtTempArchivosProc.NewRow();
+                dR[0] = file.Name;
+                _dtTempArchivosProc.Rows.Add(dR);
+                txtArchivo.Text += file.Name + ";";
+
+            }
+        }
         #endregion METODOS
         #region UTIL
         private void mouseSobreControl(object sender, EventArgs e)

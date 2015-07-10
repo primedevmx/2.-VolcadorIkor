@@ -47,5 +47,8 @@
     <Setting Name="bAplicaResp" Type="System.String" Scope="User">
       <Value Profile="(Default)">false</Value>
     </Setting>
+    <Setting Name="strMiliTimerConnXMLD" Type="System.String" Scope="User">
+      <Value Profile="(Default)">10000</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
